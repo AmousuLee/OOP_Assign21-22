@@ -126,8 +126,8 @@ abstract class BankAccount
         return "\n+++++ACCUNT INFOMATION+++++\nName: " + full_name
                 + "\nAccount No: " + account_number
                 + "\nAccount Type: " + account_type
-                + "\nBalance: " + balance
-                + "\nInterest Rate: " + interest_rate
+                + "\nBalance: RM" + balance
+                + "\nInterest Rate: " + interest_rate + "%"
                 + "\n+++++++++++++++++++++++++++\n\n";
     }
 }
@@ -157,7 +157,6 @@ class CurrentAccount extends BankAccount
         account_type = "Current Account";
         balance = 200;
         interest_rate = 0.01;
-        System.out.println("Created Current Account!");
     }
 }
 
@@ -251,6 +250,36 @@ public class Assignment_OOP
     static void deposit_func(int i,double amount,BankAccount[] account)
     {
         account[i].setBalance(amount + account[i].getBalance());
+        System.out.println("Money Deposit!");
+    }
+    
+    static void question_withdraw()
+    {
+        System.out.println("\nPlease enter withdraw amount:");
+        System.out.print("Your Input : ");
+    }
+    
+    static void withdraw_func(int i, double withdraw, BankAccount[] account){
+        //here try catch exception if possible
+        double bal = account[i].getBalance();
+        bal = bal - withdraw;
+        System.out.println("Money Withdraw!");
+        account[i].setBalance(bal);
+    }
+    
+    static void question_transfer_amount(){
+        System.out.println("\nPlease enter the amount you want to transfer:");
+        System.out.print("Your Input : ");
+    }
+    
+    static void question_transfer_receiver(){
+        System.out.println("\nPlease enter the receiver account number:");
+        System.out.print("Your Input : ");
+    }
+    
+    static void question_transfer_confirm(int transfer){
+        System.out.println("Confirm to transfer RM"+transfer+"to this account? Y/N");
+        System.out.print("Your Input : ");
     }
     
     // psvm for main class
@@ -262,7 +291,8 @@ public class Assignment_OOP
         int type;
         int account_num;
         int valueInput;
-        int arrayPlace;
+        int userPlace;
+        int receiverPlace;
         BankAccount[] account;
         account = new BankAccount[10];
         Scanner input = new Scanner(System.in);
@@ -327,10 +357,10 @@ public class Assignment_OOP
                     // ! input val here
                     
                     // find_acc() funct. call
-                    arrayPlace = find_acc(account_num, account);
+                    userPlace = find_acc(account_num, account);
                     
                     // if acc is not found 
-                    if(arrayPlace==-99)
+                    if(userPlace==-99)
                         break;
                     
                     // user input for transaction type
@@ -346,7 +376,7 @@ public class Assignment_OOP
                         case 1:
                         {
                             // - changed to toString - retr0
-                            System.out.print(account[arrayPlace]);
+                            System.out.print(account[userPlace]);
                             break;
                         }
                         // if deposit
@@ -356,16 +386,42 @@ public class Assignment_OOP
                             question_dep();
                             valueInput = input.nextInt();
                             input.skip("\n");
+                            deposit_func(userPlace, valueInput, account);
                             break;
                         }
                         // if withdraw
                         // ! WIP
                         case 3:
+                        {
+                            question_withdraw();
+                            valueInput = input.nextInt();
+                            input.skip("\n");
+                            withdraw_func(userPlace, valueInput, account);
                             break;
+                        }
+
                             
                         // if transfer
                         // ! WIP
                         case 4:
+                            question_transfer_amount();
+                            valueInput = input.nextInt();
+                            input.skip("\n");
+                            
+                            question_transfer_receiver();
+                            account_num = input.nextInt();
+                            input.skip("\n");
+                            
+                            receiverPlace = find_acc(account_num, account);
+                            System.out.print(account[userPlace]); //this change to getter bcuz only want certain output not the entire data
+                            System.out.println("|");
+                            System.out.println("V");
+                            System.out.println(account[receiverPlace]);//this change to getter bcuz only want certain output not the entire data
+                            
+                            //here need to validate if it possible to transfer
+                            withdraw_func(userPlace, valueInput, account);
+                            deposit_func(receiverPlace, valueInput, account);
+                            System.out.println("Transaction Success!");
                             break;
                             
                         // default - break;
