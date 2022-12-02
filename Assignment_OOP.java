@@ -1,26 +1,31 @@
 package assignment_oop;
 import java.util.*;
-//import sun.management.counter.ByteArrayCounter;
 
-/* 
-    TODO : superclass - BankAccount
-            ? data mem., super construc., getter & setter
-        TODO : subclass - SavingAccount
-            ? sub construc.
-        TODO : subclass - CurrentAccount
-            ? sub construc.
+/*
+    // - done
+    ! - need help
+    ? - question
+
+    // TODO : superclass - BankAccount
+            // data mem., super construc., getter & setter
+        // TODO : subclass - SavingAccount
+            // sub construc.
+        // TODO : subclass - CurrentAccount
+            // sub construc.
 
     TODO : main class
-        ? display
-        ? deposit
-        ! withdraw
-        ! transfer
+        // display
+        // deposit
+        // withdraw
+        // transfer
         
     ! err. handling and valid.
+        - check user_choice input val below for ref.
     ! refactoring and comment
 
     ? input.skip() not working on VSC , skill issue?
     ? ByteArrayCounter looks like not used, remove?
+    ? change snake_case to camelCase?
  */
 
 // super class 
@@ -123,7 +128,8 @@ abstract class BankAccount
     // toString() funct.
     public String toString()
     {
-        return "\n+++++ACCUNT INFOMATION+++++\nName: " + full_name
+        return "\n+++++  ACCOUNT INFORMATION  +++++"
+                + "\nName: " + full_name
                 + "\nAccount No: " + account_number
                 + "\nAccount Type: " + account_type
                 + "\nBalance: RM" + balance
@@ -166,7 +172,7 @@ public class Assignment_OOP
     // main menu funct.
     static void menu()
     {
-        System.out.println("==============Welcome!==============");
+        System.out.println("==============  Welcome!  ==============");
         System.out.println("1. Create Account");
         System.out.println("2. Make a Transaction");
         System.out.println("0. End");
@@ -176,7 +182,7 @@ public class Assignment_OOP
     // transaction menu funct.
     static void transaction_menu()
     {
-        System.out.println("==============TRANSACTION==============");
+        System.out.println("==============  TRANSACTION  ==============");
         System.out.println("1. Display");
         System.out.println("2. Deposit");
         System.out.println("3. Withdraw");
@@ -187,7 +193,7 @@ public class Assignment_OOP
     // account type menu funct.
     static void question_accountType()
     {
-        System.out.println("\nChoose ur bank account type");
+        System.out.println("\nChoose your bank account type -");
         System.out.println("1. Saving Account");
         System.out.println("2. Current Account");
         System.out.print("Your Input : ");
@@ -196,14 +202,14 @@ public class Assignment_OOP
     // full name menu funct.
     static void question_name()
     {
-        System.out.println("\nPlease enter your name:");
+        System.out.println("\nPlease enter your name : ");
         System.out.print("Your Input : ");
     }
     
     // account num. menu funct.
     static void question_accountNumber()
     {
-        System.out.println("\nPlease enter your account number:");
+        System.out.println("\nPlease enter your account number : ");
         System.out.print("Your Input : ");
     }
     
@@ -214,7 +220,7 @@ public class Assignment_OOP
         {
             if(account[i]==null)
             {
-                System.out.println("Bank Account not found");
+                System.out.println("Bank Account not found !");
                 return -99;
             }
             
@@ -230,19 +236,17 @@ public class Assignment_OOP
     // ! moved display from main to here - retr0
     static void display_account(int loop,BankAccount[] account)
     {
-        System.out.println("\n+++++ACCUNT INFOMATION+++++");
-        System.out.println("Name: "+account[loop].getFull_name());
-        System.out.println("Account No: "+account[loop].getAccount_number());
-        System.out.println("Account Type: "+account[loop].getAccount_type());
+        System.out.println("\n+++++  ACCOUNT INFOMATION  +++++");
+        System.out.println("Name : " + account[loop].getFull_name());
+        System.out.println("Account No : " + account[loop].getAccount_number());
+        System.out.println("Account Type : " + account[loop].getAccount_type());
         System.out.println("+++++++++++++++++++++++++++\n");
-        return;      
     }
     
-    
     // deposit menu funct.
-    static void question_dep()
+    static void question_deposit()
     {
-        System.out.println("\nPlease enter deposit amount:");
+        System.out.println("\nPlease enter deposit amount : ");
         System.out.print("Your Input : ");
     }
     
@@ -250,40 +254,45 @@ public class Assignment_OOP
     static void deposit_function(int i,double amount,BankAccount[] account)
     {
         account[i].setBalance(amount + account[i].getBalance());
-        System.out.println("Money Deposit!");
+        System.out.println("Money Deposited!");
     }
-    
+    // withdraw menu funct.
     static void question_withdraw()
     {
-        System.out.println("\nPlease enter withdraw amount:");
+        System.out.println("\nPlease enter withdraw amount : ");
         System.out.print("Your Input : ");
     }
     
-    static void withdraw_function(int i, double withdraw, BankAccount[] account){
+    // withdraw funct.
+    static void withdraw_function(int i, double withdraw, BankAccount[] account)
+    {
         //here try catch exception if possible
         double bal = account[i].getBalance();
         bal = bal - withdraw;
-        System.out.println("Money Withdraw!");
+        System.out.println("Money Withdrawn!");
         account[i].setBalance(bal);
     }
     
-    static void question_transfer_amount(){
-        System.out.println("\nPlease enter the amount you want to transfer:");
+    // transfer menu funct.
+    static void question_transfer_amount()
+    {
+        System.out.println("\nPlease enter the amount you want to transfer : ");
         System.out.print("Your Input : ");
     }
     
-    static void question_transfer_receiver(){
-        System.out.println("\nPlease enter the receiver account number:");
+    // transfer funct.
+    static void question_transfer_receiver()
+    {
+        System.out.println("\nPlease enter the receiver account number : ");
         System.out.print("Your Input : ");
     }
-    
     
     // psvm for main class
     public static void main(String[] args)
     {
         // Local var and obj init.
         int loop = 0;
-        int user_choice;
+        int user_choice = 1;
         int account_type;
         int account_number;
         int valueInput;
@@ -294,17 +303,47 @@ public class Assignment_OOP
         account = new BankAccount[10];
         Scanner input = new Scanner(System.in);
         
+        boolean error = false;
+        
         // do... while input is not 0
         do
         {
             // user_choice input for user
-            menu();
-            user_choice = input.nextInt();
-            input.skip("\n"); //remove \n after nextInt
-            // ! input val here
+            // ! improvised do... try... if (not desired output) ... catch while... not err - retr0.
+            // ? no nid to use input.skip? since under catch alrdy buffers.
+            do
+            {
+                menu();
+                // try... catch for except. handling
+                try
+                {
+                // start of except. cause
+                    user_choice = input.nextInt();
+                // end of except. cause
 
+                    // if no except. raised, but not within 0-2 else cont.
+                    if (user_choice < 0 || user_choice > 2)
+                    {
+                        error = true;
+                        System.out.println("Error! Please enter correct input!");
+                    }
+                    else
+                    {
+                        error = false;
+                    }
+                }
+                catch (InputMismatchException user_choice_err)
+                {
+                    error = true;
+                    System.out.println("Error! Please enter correct input!");
+                }
+                input.nextLine();   // this is to clear the input buffer.
+                
+            } while (error);
+            
             // switch... on user_choice
-            switch(user_choice) //Main Menu Switch Case
+            // Main Menu Switch Case
+            switch(user_choice)
             {
                 // if create account
                 case 1 :
@@ -342,7 +381,8 @@ public class Assignment_OOP
                     display_account(loop, account);
                     loop++;
                     break;
-                }
+
+                } // Case 1 ends
                 
                 // if make transaction
                 case 2:
@@ -377,17 +417,15 @@ public class Assignment_OOP
                             break;
                         }
                         // if deposit
-                        // ! WIP
                         case 2:
                         {
-                            question_dep();
+                            question_deposit();
                             valueInput = input.nextInt();
                             input.skip("\n");
                             deposit_function(userPlaceInArray, valueInput, account);
                             break;
                         }
                         // if withdraw
-                        // ! WIP
                         case 3:
                         {
                             question_withdraw();
@@ -396,11 +434,9 @@ public class Assignment_OOP
                             withdraw_function(userPlaceInArray, valueInput, account);
                             break;
                         }
-
-                            
                         // if transfer
-                        // ! WIP
                         case 4:
+                        {
                             question_transfer_amount();
                             valueInput = input.nextInt();
                             input.skip("\n");
@@ -420,14 +456,15 @@ public class Assignment_OOP
                             deposit_function(receiverPlaceInArray, valueInput, account);
                             System.out.println("Transaction Success!");
                             break;
-                            
+                        }
                         // default - break;
                         default:
                             break;
                             
-                    }//Transaction Menu End 
+                    } // Transaction Menu End 
                     break;
-                }//Case 2 End
+
+                } // Case 2 End
                 
                 // if exit from main menu, break
                 case 0: 
@@ -437,7 +474,7 @@ public class Assignment_OOP
                 default:
                     break;
                     
-            }//Main Menu Switch Case End
+            } // Main Menu Switch Case End
         } while (user_choice != 0);
     }  
 }
