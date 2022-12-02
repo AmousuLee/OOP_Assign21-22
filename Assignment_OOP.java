@@ -174,7 +174,7 @@ public class Assignment_OOP
     }
     
     // transaction menu funct.
-    static void transac_menu()
+    static void transaction_menu()
     {
         System.out.println("==============TRANSACTION==============");
         System.out.println("1. Display");
@@ -185,7 +185,7 @@ public class Assignment_OOP
     }
     
     // account type menu funct.
-    static void question_acc()
+    static void question_accountType()
     {
         System.out.println("\nChoose ur bank account type");
         System.out.println("1. Saving Account");
@@ -201,14 +201,14 @@ public class Assignment_OOP
     }
     
     // account num. menu funct.
-    static void question_accnum()
+    static void question_accountNumber()
     {
         System.out.println("\nPlease enter your account number:");
         System.out.print("Your Input : ");
     }
     
     // find account funct.
-    static int find_acc(int accnum, BankAccount[] account)
+    static int find_account(int accnum, BankAccount[] account)
     {
         for(int i=0;i<account.length;i++)
         {
@@ -228,7 +228,7 @@ public class Assignment_OOP
     
     // ! changed to toString - retr0
     // ! moved display from main to here - retr0
-    static void display_acc(int loop,BankAccount[] account)
+    static void display_account(int loop,BankAccount[] account)
     {
         System.out.println("\n+++++ACCUNT INFOMATION+++++");
         System.out.println("Name: "+account[loop].getFull_name());
@@ -247,7 +247,7 @@ public class Assignment_OOP
     }
     
     // deposit funct.
-    static void deposit_func(int i,double amount,BankAccount[] account)
+    static void deposit_function(int i,double amount,BankAccount[] account)
     {
         account[i].setBalance(amount + account[i].getBalance());
         System.out.println("Money Deposit!");
@@ -259,7 +259,7 @@ public class Assignment_OOP
         System.out.print("Your Input : ");
     }
     
-    static void withdraw_func(int i, double withdraw, BankAccount[] account){
+    static void withdraw_function(int i, double withdraw, BankAccount[] account){
         //here try catch exception if possible
         double bal = account[i].getBalance();
         bal = bal - withdraw;
@@ -277,22 +277,19 @@ public class Assignment_OOP
         System.out.print("Your Input : ");
     }
     
-    static void question_transfer_confirm(int transfer){
-        System.out.println("Confirm to transfer RM"+transfer+"to this account? Y/N");
-        System.out.print("Your Input : ");
-    }
     
     // psvm for main class
     public static void main(String[] args)
     {
         // Local var and obj init.
         int loop = 0;
-        int choice;
-        int type;
-        int account_num;
+        int user_choice;
+        int account_type;
+        int account_number;
         int valueInput;
-        int userPlace;
-        int receiverPlace;
+        int userPlaceInArray;
+        int receiverPlaceInArray;
+        
         BankAccount[] account;
         account = new BankAccount[10];
         Scanner input = new Scanner(System.in);
@@ -300,26 +297,26 @@ public class Assignment_OOP
         // do... while input is not 0
         do
         {
-            // user input for choice
+            // user_choice input for user
             menu();
-            choice = input.nextInt();
+            user_choice = input.nextInt();
             input.skip("\n"); //remove \n after nextInt
             // ! input val here
 
-            // switch... on choice
-            switch(choice)
+            // switch... on user_choice
+            switch(user_choice) //Main Menu Switch Case
             {
                 // if create account
                 case 1 :
                 {
                     // user input for acc_type
-                    question_acc();
-                    type = input.nextInt();  
+                    question_accountType();
+                    account_type = input.nextInt();  
                     input.skip("\n");
                     // ! input val here
                  
-                    // switch... on type
-                    switch(type)
+                    // switch... on account_type
+                    switch(account_type)
                     {
                         // if SavingAccount
                         case 1:
@@ -342,7 +339,7 @@ public class Assignment_OOP
                     
                     // moved to funct - retr0
                     // display_acc() funct. call
-                    display_acc(loop, account);
+                    display_account(loop, account);
                     loop++;
                     break;
                 }
@@ -351,32 +348,32 @@ public class Assignment_OOP
                 case 2:
                 {
                     // user input for acc_num
-                    question_accnum();
-                    account_num = input.nextInt();  
+                    question_accountNumber();
+                    account_number = input.nextInt();  
                     input.skip("\n");
                     // ! input val here
                     
-                    // find_acc() funct. call
-                    userPlace = find_acc(account_num, account);
+                    // find_account() funct. call
+                    userPlaceInArray = find_account(account_number, account);
                     
                     // if acc is not found 
-                    if(userPlace==-99)
+                    if(userPlaceInArray==-99)
                         break;
                     
                     // user input for transaction type
-                    transac_menu();
-                    type = input.nextInt();  
+                    transaction_menu();
+                    user_choice = input.nextInt();  
                     input.skip("\n"); //remove \n after the nextInt input
                     // ! input val here
                     
-                    // switch... on type
-                    switch(type)
+                    // switch... on user_choice
+                    switch(user_choice)
                     {
                         // if display
                         case 1:
                         {
                             // - changed to toString - retr0
-                            System.out.print(account[userPlace]);
+                            System.out.print(account[userPlaceInArray]);
                             break;
                         }
                         // if deposit
@@ -386,7 +383,7 @@ public class Assignment_OOP
                             question_dep();
                             valueInput = input.nextInt();
                             input.skip("\n");
-                            deposit_func(userPlace, valueInput, account);
+                            deposit_function(userPlaceInArray, valueInput, account);
                             break;
                         }
                         // if withdraw
@@ -396,7 +393,7 @@ public class Assignment_OOP
                             question_withdraw();
                             valueInput = input.nextInt();
                             input.skip("\n");
-                            withdraw_func(userPlace, valueInput, account);
+                            withdraw_function(userPlaceInArray, valueInput, account);
                             break;
                         }
 
@@ -409,18 +406,18 @@ public class Assignment_OOP
                             input.skip("\n");
                             
                             question_transfer_receiver();
-                            account_num = input.nextInt();
+                            account_number = input.nextInt();
                             input.skip("\n");
                             
-                            receiverPlace = find_acc(account_num, account);
-                            System.out.print(account[userPlace]); //this change to getter bcuz only want certain output not the entire data
+                            receiverPlaceInArray = find_account(account_number, account);
+                            System.out.print(account[userPlaceInArray]); //this change to getter bcuz only want certain output not the entire data
                             System.out.println("|");
                             System.out.println("V");
-                            System.out.println(account[receiverPlace]);//this change to getter bcuz only want certain output not the entire data
+                            System.out.println(account[receiverPlaceInArray]);//this change to getter bcuz only want certain output not the entire data
                             
                             //here need to validate if it possible to transfer
-                            withdraw_func(userPlace, valueInput, account);
-                            deposit_func(receiverPlace, valueInput, account);
+                            withdraw_function(userPlaceInArray, valueInput, account);
+                            deposit_function(receiverPlaceInArray, valueInput, account);
                             System.out.println("Transaction Success!");
                             break;
                             
@@ -428,9 +425,10 @@ public class Assignment_OOP
                         default:
                             break;
                             
-                    } 
+                    }//Transaction Menu End 
                     break;
-                }
+                }//Case 2 End
+                
                 // if exit from main menu, break
                 case 0: 
                     break;
@@ -439,7 +437,7 @@ public class Assignment_OOP
                 default:
                     break;
                     
-            }
-        } while (choice != 0);
+            }//Main Menu Switch Case End
+        } while (user_choice != 0);
     }  
 }
