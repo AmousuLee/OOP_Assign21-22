@@ -20,12 +20,20 @@ import java.util.*;
         // transfer
         
     ! err. handling and valid.
-        - check user_choice input val below for ref.
+        // user_choice
+        // acc_type
+        // full_name
+        // acc_num
+        - user_choice (for transact.)
+        - valueInput (deposit)
+        - valueInput (withdraw)
+        - valueInput (transfer)
+            - acc_num (transfer)
     ! refactoring and comment
 
-    ? input.skip() not working on VSC , skill issue?
     ? ByteArrayCounter looks like not used, remove?
     ? change snake_case to camelCase?
+    ? refactor - move all input valid. to functs.?
  */
 
 // super class 
@@ -216,7 +224,8 @@ public class Assignment_OOP
     // find account funct.
     static int find_account(int accnum, BankAccount[] account)
     {
-        for(int i=0;i<account.length;i++)
+        int i = 0;
+        for( ; i < account.length; i++)
         {
             if(account[i]==null)
             {
@@ -224,7 +233,8 @@ public class Assignment_OOP
                 return -99;
             }
             
-            if(account[i].getAccount_number() == accnum){
+            if(account[i].getAccount_number() == accnum)
+            {
                 System.out.println("Welcome Mr./Mrs. " + account[i].getFull_name() + "\n");
                 return i;
             }
@@ -256,6 +266,7 @@ public class Assignment_OOP
         account[i].setBalance(amount + account[i].getBalance());
         System.out.println("Money Deposited!");
     }
+    
     // withdraw menu funct.
     static void question_withdraw()
     {
@@ -295,7 +306,7 @@ public class Assignment_OOP
         int loop = 0;
         int user_choice = 1;
         int account_type = 1;
-        int account_number;
+        int account_number = 0;
         int valueInput;
         int userPlaceInArray;
         int receiverPlaceInArray;
@@ -324,6 +335,7 @@ public class Assignment_OOP
                     // if no except. raised, but not within 0-2; else cont.
                     if (user_choice < 0 || user_choice > 2)
                     {
+                        error = true;
                         throw new Exception("Please enter correct input!\n");
                     }
                     else
@@ -339,9 +351,9 @@ public class Assignment_OOP
                 catch (Exception user_choice_err)
                 {
                     error = true;
-                    System.out.println("Error! : "+user_choice_err.getMessage());
+                    System.out.println("Error! : " + user_choice_err.getMessage());
                 }
-                input = new Scanner(System.in); //clean the input
+                input = new Scanner(System.in);     // clean buffer
                 
             } while (error);
             
@@ -369,7 +381,7 @@ public class Assignment_OOP
                             if (account_type < 1 || account_type > 2)
                             {
                                 error = true;
-                                System.out.println("Error! Please enter correct input!\n");
+                                throw new Exception("Please enter correct input!\n");
                             }
                             else
                             {
@@ -379,7 +391,12 @@ public class Assignment_OOP
                         catch (InputMismatchException account_type_err)
                         {
                             error = true;
-                            System.out.println("Error! Please enter correct input!\n");
+                            System.out.println("Error! : Please enter correct input!\n");
+                        }
+                        catch (Exception account_type_err)
+                        {
+                            error = true;
+                            System.out.println("Error! : " + account_type_err.getMessage());
                         }
                         input.nextLine();   // clear buffer
 
@@ -407,6 +424,7 @@ public class Assignment_OOP
                     account[loop].setFull_name(input.nextLine());
                     
                     // ! input validation for full_name
+                    // ? can possibly check for numbers in the str : use matcher, pattern calss.
                     // if return null go to do... while
                     if (account[loop].getFull_name().length() == 0)
                     {
@@ -430,11 +448,44 @@ public class Assignment_OOP
                 // if make transaction
                 case 2:
                 {
+                    error = false;
+
                     // user input for acc_num
-                    question_accountNumber();
-                    account_number = input.nextInt();  
-                    input.skip("\n");
-                    // ! input val here
+                    // ! input validation for acc_num
+                    do
+                    {                        
+                        question_accountNumber();
+                        
+                        try
+                        {
+                        // start of except. cause
+                            account_number = input.nextInt();
+                        // end of except. cause
+                            
+                            // if acc_num is outside range
+                            if (account_number < 1001 || account_number > 9999)
+                            {
+                                error = true;
+                                throw new Exception("Please enter correct input!");
+                            }
+                            else
+                            {
+                                error = false;
+                            }
+                        }
+                        catch (InputMismatchException account_num_err)
+                        {
+                            error = true;
+                            System.out.println("Error! : Please enter correct input!\n");
+                        }
+                        catch (Exception account_num_err)
+                        {
+                            error = true;
+                            System.out.println("Error! : " + account_num_err.getMessage());
+                        }
+                        input.nextLine();   // clear buffer
+                        
+                    } while (error);
                     
                     // find_account() funct. call
                     userPlaceInArray = find_account(account_number, account);
