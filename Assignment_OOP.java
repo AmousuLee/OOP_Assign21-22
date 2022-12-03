@@ -407,6 +407,8 @@ public class Assignment_OOP
                     // ! input val here
                     
                     // switch... on user_choice
+                    //! deposit,withdraw,transaction all need validation
+                    //! the 3 above function after done need to display the updated balance
                     switch(user_choice)
                     {
                         // if display
@@ -423,6 +425,8 @@ public class Assignment_OOP
                             valueInput = input.nextInt();
                             input.skip("\n");
                             deposit_function(userPlaceInArray, valueInput, account);
+                            System.out.println("\nYour updated balance : ");
+                            System.out.print(account[userPlaceInArray]);
                             break;
                         }
                         // if withdraw
@@ -432,6 +436,8 @@ public class Assignment_OOP
                             valueInput = input.nextInt();
                             input.skip("\n");
                             withdraw_function(userPlaceInArray, valueInput, account);
+                            System.out.println("\nYour updated balance : ");
+                            System.out.print(account[userPlaceInArray]);
                             break;
                         }
                         // if transfer
@@ -451,7 +457,7 @@ public class Assignment_OOP
                             System.out.println("V");
                             System.out.println(account[receiverPlaceInArray]);//this change to getter bcuz only want certain output not the entire data
                             
-                            //here need to validate if it possible to transfer
+                            
                             withdraw_function(userPlaceInArray, valueInput, account);
                             deposit_function(receiverPlaceInArray, valueInput, account);
                             System.out.println("Transaction Success!");
@@ -462,6 +468,7 @@ public class Assignment_OOP
                             break;
                             
                     } // Transaction Menu End 
+                    
                     break;
 
                 } // Case 2 End
