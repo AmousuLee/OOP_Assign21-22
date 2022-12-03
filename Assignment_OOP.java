@@ -324,8 +324,8 @@ public class Assignment_OOP
                     // if no except. raised, but not within 0-2; else cont.
                     if (user_choice < 0 || user_choice > 2)
                     {
-                        error = true;
-                        System.out.println("Error! Please enter correct input!\n");
+                        //proper way to throw exception
+                        throw new InputMismatchException("Please enter correct input!");
                     }
                     else
                     {
@@ -335,9 +335,9 @@ public class Assignment_OOP
                 catch (InputMismatchException user_choice_err)
                 {
                     error = true;
-                    System.out.println("Error! Please enter correct input!\n");
+                    System.out.println("Error! : "+user_choice_err.getMessage()); 
                 }
-                input.nextLine();   // clear buffer
+                input = new Scanner(System.in); //clean the input
                 
             } while (error);
             
