@@ -291,9 +291,10 @@ public class Assignment_OOP
     public static void main(String[] args)
     {
         // Local var and obj init.
+        // ! init all vars that need to pass valid. first
         int loop = 0;
         int user_choice = 1;
-        int account_type;
+        int account_type = 1;
         int account_number;
         int valueInput;
         int userPlaceInArray;
@@ -309,8 +310,7 @@ public class Assignment_OOP
         do
         {
             // user_choice input for user
-            // ! improvised do... try... if (not desired output) ... catch while... not err - retr0.
-            // ? no nid to use input.skip? since under catch alrdy buffers.
+            // ! input validation for user_choice
             do
             {
                 menu();
@@ -321,11 +321,11 @@ public class Assignment_OOP
                     user_choice = input.nextInt();
                 // end of except. cause
 
-                    // if no except. raised, but not within 0-2 else cont.
+                    // if no except. raised, but not within 0-2; else cont.
                     if (user_choice < 0 || user_choice > 2)
                     {
                         error = true;
-                        System.out.println("Error! Please enter correct input!");
+                        System.out.println("Error! Please enter correct input!\n");
                     }
                     else
                     {
@@ -335,9 +335,9 @@ public class Assignment_OOP
                 catch (InputMismatchException user_choice_err)
                 {
                     error = true;
-                    System.out.println("Error! Please enter correct input!");
+                    System.out.println("Error! Please enter correct input!\n");
                 }
-                input.nextLine();   // this is to clear the input buffer.
+                input.nextLine();   // clear buffer
                 
             } while (error);
             
@@ -349,10 +349,37 @@ public class Assignment_OOP
                 case 1 :
                 {
                     // user input for acc_type
-                    question_accountType();
-                    account_type = input.nextInt();  
-                    input.skip("\n");
-                    // ! input val here
+                    // ! input validation for account_type
+                    error = false;
+
+                    do
+                    {
+                        question_accountType();
+                        try
+                        {
+                        // start of except. cause
+                            account_type = input.nextInt();
+                        // end of except. cause
+
+                            // if no except. raised but not within range 1-2; else cont.
+                            if (account_type < 1 || account_type > 2)
+                            {
+                                error = true;
+                                System.out.println("Error! Please enter correct input!\n");
+                            }
+                            else
+                            {
+                                error = false;
+                            }
+                        }
+                        catch (InputMismatchException account_type_err)
+                        {
+                            error = true;
+                            System.out.println("Error! Please enter correct input!\n");
+                        }
+                        input.nextLine();   // clear buffer
+
+                    } while (error);
                  
                     // switch... on account_type
                     switch(account_type)
@@ -374,7 +401,19 @@ public class Assignment_OOP
                     // user input for full_name
                     question_name();
                     account[loop].setFull_name(input.nextLine());
-                    // ! input val here
+                    
+                    // ! input validation for full_name
+                    // if return null go to do... while
+                    if (account[loop].getFull_name().length() == 0)
+                    {
+                        do
+                        {
+                            System.out.println("Your name cannot be empty!");
+                            question_name();
+                            account[loop].setFull_name(input.nextLine());
+
+                        } while (account[loop].getFull_name().length() == 0);
+                    }
                     
                     // moved to funct - retr0
                     // display_acc() funct. call
