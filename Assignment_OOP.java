@@ -216,15 +216,16 @@ public class Assignment_OOP
     // find account funct.
     static int find_account(int accnum, BankAccount[] account)
     {
-        for(int i=0;i<account.length;i++)
+        for(int i = 0; i < account.length; i++)
         {
-            if(account[i]==null)
+            if(account[i] == null)
             {
                 System.out.println("Bank Account not found !");
                 return -99;
             }
             
-            if(account[i].getAccount_number() == accnum){
+            if(account[i].getAccount_number() == accnum)
+            {
                 System.out.println("Welcome Mr./Mrs. " + account[i].getFull_name() + "\n");
                 return i;
             }
@@ -295,7 +296,7 @@ public class Assignment_OOP
         int loop = 0;
         int user_choice = 1;
         int account_type = 1;
-        int account_number;
+        int account_number = 0;
         int valueInput;
         int userPlaceInArray;
         int receiverPlaceInArray;
@@ -324,7 +325,8 @@ public class Assignment_OOP
                     // if no except. raised, but not within 0-2; else cont.
                     if (user_choice < 0 || user_choice > 2)
                     {
-                        throw new Exception("Please enter correct input!\n");
+                        error = true;
+                        System.out.println("Error! Please enter correct input!\n");
                     }
                     else
                     {
@@ -334,14 +336,9 @@ public class Assignment_OOP
                 catch (InputMismatchException user_choice_err)
                 {
                     error = true;
-                    System.out.println("Error! : Please enter correct input!\n");
+                    System.out.println("Error! Please enter correct input!\n");
                 }
-                catch (Exception user_choice_err)
-                {
-                    error = true;
-                    System.out.println("Error! : "+user_choice_err.getMessage());
-                }
-                input = new Scanner(System.in); //clean the input
+                input.nextLine();   // clear buffer
                 
             } while (error);
             
@@ -431,10 +428,35 @@ public class Assignment_OOP
                 case 2:
                 {
                     // user input for acc_num
-                    question_accountNumber();
-                    account_number = input.nextInt();  
-                    input.skip("\n");
-                    // ! input val here
+                    do
+                    {                        
+                        question_accountNumber();
+                        
+                        try
+                        {
+                        // start of except. cause
+                            account_number = input.nextInt();
+                        // end of except. cause
+                            
+                            // ? need help - propaply can refactor find_account for this
+                            if (account_number < 1001 || account_number > 9999)
+                            {
+                                error = true;
+                                System.out.println("Error! Account does not exist!\n");
+                            }
+                            else
+                            {
+                                error = false;
+                            }
+                        }
+                        catch (InputMismatchException account_number_err)
+                        {
+                            error = true;
+                            System.out.println("Error! Please enter correct input!\n");
+                        }
+                        input.nextLine();
+                        
+                    } while (error);
                     
                     // find_account() funct. call
                     userPlaceInArray = find_account(account_number, account);
