@@ -1,4 +1,3 @@
-package assignment_oop;
 import java.util.*;
 
 /*
@@ -20,15 +19,18 @@ import java.util.*;
         // transfer
         
     ! err. handling and valid.
-        // user_choice
-        // acc_type
-        // full_name
-        // acc_num
-        - user_choice (for transact.)
-        - valueInput (deposit)
-        - valueInput (withdraw)
-        - valueInput (transfer)
-            - acc_num (transfer)
+        // user_choice (main menu)
+            create acc :
+            // acc_type
+            // full_name
+
+            transact :
+            // acc_num
+            - user_choice
+                - valueInput (deposit)
+                - valueInput (withdraw)
+                - valueInput (transfer)
+                    - acc_num (transfer)
     ! refactoring and comment
 
     ? ByteArrayCounter looks like not used, remove?
@@ -229,7 +231,7 @@ public class Assignment_OOP
         {
             if(account[i]==null)
             {
-                System.out.println("Bank Account not found !");
+                System.out.println("Bank Account not found !\n");
                 return -99;
             }
             
@@ -328,9 +330,9 @@ public class Assignment_OOP
                 // try... catch for except. handling
                 try
                 {
-                // start of except. cause
+                    // start of except. cause
                     user_choice = input.nextInt();
-                // end of except. cause
+                    // end of except. cause
 
                     // if no except. raised, but not within 0-2; else cont.
                     if (user_choice < 0 || user_choice > 2)
@@ -373,9 +375,9 @@ public class Assignment_OOP
                         question_accountType();
                         try
                         {
-                        // start of except. cause
+                            // start of except. cause
                             account_type = input.nextInt();
-                        // end of except. cause
+                            // end of except. cause
 
                             // if no except. raised but not within range 1-2; else cont.
                             if (account_type < 1 || account_type > 2)
@@ -458,9 +460,9 @@ public class Assignment_OOP
                         
                         try
                         {
-                        // start of except. cause
+                            // start of except. cause
                             account_number = input.nextInt();
-                        // end of except. cause
+                            // end of except. cause
                             
                             // if acc_num is outside range
                             if (account_number < 1001 || account_number > 9999)
@@ -494,11 +496,36 @@ public class Assignment_OOP
                     if(userPlaceInArray==-99)
                         break;
                     
+                    error = false;
+
                     // user input for transaction type
-                    transaction_menu();
-                    user_choice = input.nextInt();  
-                    input.skip("\n"); //remove \n after the nextInt input
-                    // ! input val here
+                    do
+                    {
+                        transaction_menu();
+                        
+                        try
+                        {
+                            user_choice = input.nextInt();
+
+                            if (user_choice < 0 || user_choice > 4)
+                            {
+                                error = true;
+                                throw new Exception("Please enter correct input!");
+                            }
+                        }
+                        catch (InputMismatchException user_choice_err)
+                        {
+                            error = true;
+                            System.out.println("Error! : Please enter correct input!\n");
+                        }
+                        catch (Exception user_choice_err)
+                        {
+                            error = true;
+                            System.out.println("Error! : " + user_choice_err.getMessage());
+                        }
+                        input.nextLine();   // clear buffer
+
+                    } while (error);
                     
                     // switch... on user_choice
                     //! deposit,withdraw,transaction all need validation
@@ -518,6 +545,8 @@ public class Assignment_OOP
                             question_deposit();
                             valueInput = input.nextInt();
                             input.skip("\n");
+
+
                             deposit_function(userPlaceInArray, valueInput, account);
                             System.out.println("\nYour updated balance : ");
                             System.out.print(account[userPlaceInArray]);
@@ -529,6 +558,8 @@ public class Assignment_OOP
                             question_withdraw();
                             valueInput = input.nextInt();
                             input.skip("\n");
+
+
                             withdraw_function(userPlaceInArray, valueInput, account);
                             System.out.println("\nYour updated balance : ");
                             System.out.print(account[userPlaceInArray]);
