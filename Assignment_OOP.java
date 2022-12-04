@@ -9,30 +9,17 @@ package assignment_oop;
 import java.util.*;
 import java.util.regex.*;
 
-/**
- * This code is written for the submission of Group Assignment
- * CSEB3313 : Object-oriented Programming
- * 
- * @author AmousuLee
- * @author [redacted]
- * @author Ret2y
- * @version 1.7Alpha
- * @since 30/11/2022
- * @link https://github.com/AmousuLee/OOP_Assign21-22
- */
 
 /*
     // - done
     ! - need help
     ? - question
-
     // TODO_done : superclass - BankAccount
             // data mem., super construc., getter & setter
         // TODO_done : subclass - SavingAccount
             // sub construc.
         // TODO_done : subclass - CurrentAccount
             // sub construc.
-
     // TODO_done : main class
         // display
         // deposit
@@ -45,7 +32,6 @@ import java.util.regex.*;
             // acc_type
             // full_name
             // TODO_done : matcher, pattern class for full_name
-
             transact :
             // acc_num
             //- user_choice
@@ -54,7 +40,6 @@ import java.util.regex.*;
                 //- valueInput (transfer)
                     //- acc_num (transfer)
     ! refactoring and comment
-
     ? ByteArrayCounter looks like not used, remove?
     ? change snake_case to camelCase?
     ? refactor - move all input valid. to functs.?
@@ -310,7 +295,6 @@ public class Assignment_oop
     {
         double bal = account[i].getBalance();
         bal = bal - withdraw;
-        System.out.println("Money Withdrawn!");
         account[i].setBalance(bal);
     }
     
@@ -736,26 +720,23 @@ public class Assignment_oop
                             } while (error);
                             
                             receiverPlaceInArray = find_account(account_number, account);
+                            System.out.print("\n");
                             display_transac(userPlaceInArray, account);
-                            System.out.println("\n|");
-                            System.out.println("|       " + "Transfering RM" + String.format("%.2f", valueInput));
-                            System.out.println("V\n");
+                            System.out.println("\n-------Transfering RM" + String.format("%.2f", valueInput) + "-------\n");
                             display_transac(receiverPlaceInArray, account);
-                            
                             System.out.print("\n");
                             System.out.println("======================================");
                             withdraw_function(userPlaceInArray, valueInput, account);
                             deposit_function(receiverPlaceInArray, valueInput, account);
-                            System.out.println("Transaction Success!");
+                            System.out.println("Transaction Successful!");
                             System.out.println("======================================");
                             System.out.print("\n");
                             
-                            
+                            //Display after transfer done
                             display_transac(userPlaceInArray, account);
-                            System.out.println("\n|");
-                            System.out.println("|       " + "Transferred RM" + String.format("%.2f", valueInput));
-                            System.out.println("V\n");
+                            System.out.println("\n------- RM" + String.format("%.2f", valueInput) + " Transfered-------\n");;
                             display_transac(receiverPlaceInArray, account);
+                            System.out.print("\n");
                             break;
                         }
                         // default - break;
@@ -780,3 +761,4 @@ public class Assignment_oop
         } while (user_choice != 0);
     }  
 }
+
