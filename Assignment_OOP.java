@@ -5,7 +5,7 @@
 | Lang : java                                                                  |
 | Date Created : 30/11/2022                                                    |
 *******************************************************************************/
-package assignment_oop;
+//package assignment_oop;
 import java.util.*;
 import java.util.regex.*;
 
@@ -399,6 +399,10 @@ public class Assignment_OOP
                         error = true;
                         throw new Exception("Please enter correct input!");
                     }
+                    else
+                    {
+                        error = false;
+                    }
                 }
                 catch (InputMismatchException user_choice_err)
                 {
@@ -439,6 +443,10 @@ public class Assignment_OOP
                             {
                                 error = true;
                                 throw new Exception("Please enter correct input!");
+                            }
+                            else
+                            {
+                                error = false;
                             }
                         }
                         catch (InputMismatchException account_type_err)
@@ -492,9 +500,13 @@ public class Assignment_OOP
                                 throw new Exception("Your name cannot be empty!");
                             }
                             // if name inputted does not follow regEx pattern
-                            if (!matcher.matches())
+                            else if (!matcher.matches())
                             {
                                 throw new Exception("Error! Please enter a valid name! (No special symbol except . - ')");
+                            }
+                            else
+                            {
+                                error = false;
                             }
                         }
                         catch (Exception account_num_err)
@@ -576,6 +588,10 @@ public class Assignment_OOP
                             {
                                 error = true;
                                 throw new Exception("Please enter correct input!");
+                            }
+                            else
+                            {
+                                error = false;
                             }
                         }
                         catch (InputMismatchException user_choice_err)
@@ -700,7 +716,7 @@ public class Assignment_OOP
                                 // if no except. raised but less than 0; else cont.
                                 if (valueInput < 0)
                                 {
-                                    throw new Exception("Deposit cannot be less than 0!\n");
+                                    throw new Exception("Transfer amount cannot be less than 0!\n");
                                 }
                                 // if the transferred amount more than user deposit
                                 if (account[userPlaceInArray].getBalance() < valueInput)
