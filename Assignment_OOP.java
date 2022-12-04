@@ -5,9 +5,55 @@
 | Lang : java                                                                  |
 | Date Created : 30/11/2022                                                    |
 *******************************************************************************/
-package assignment_oop;
+//package assignment_oop;
 import java.util.*;
 import java.util.regex.*;
+
+/**
+ * This code is written for the submission of Group Assignment
+ * CSEB3313 : Object-oriented Programming
+ * 
+ * @author AmousuLee
+ * @author [redacted]
+ * @author Ret2y
+ * @version 1.7Alpha
+ * @since 30/11/2022
+ * @link https://github.com/AmousuLee/OOP_Assign21-22
+ */
+/*
+    // - done
+    ! - need help
+    ? - question
+    // TODO_done : superclass - BankAccount
+            // data mem., super construc., getter & setter
+        // TODO_done : subclass - SavingAccount
+            // sub construc.
+        // TODO_done : subclass - CurrentAccount
+            // sub construc.
+    // TODO_done : main class
+        // display
+        // deposit
+        // withdraw
+        // transfer
+        
+    ! err. handling and valid.
+        // user_choice (main menu)
+            create acc :
+            // acc_type
+            // full_name
+            // TODO_done : matcher, pattern class for full_name
+            transact :
+            // acc_num
+            //- user_choice
+                //- valueInput (deposit)
+                //- valueInput (withdraw)
+                //- valueInput (transfer)
+                    //- acc_num (transfer)
+    ! refactoring and comment
+    ? ByteArrayCounter looks like not used, remove?
+    ? change snake_case to camelCase?
+    ? refactor - move all input valid. to functs.?
+ */
 
 // super class 
 abstract class BankAccount
@@ -148,7 +194,7 @@ class CurrentAccount extends BankAccount
 }
 
 // main class
-public class Assignment_oop
+public class Assignment_OOP
 {
     // main menu funct.
     static void menu()
@@ -210,6 +256,7 @@ public class Assignment_oop
                 return i;
             }
         }
+        return -99;
     }
     
     // ! changed to toString - retr0
@@ -348,13 +395,13 @@ public class Assignment_oop
                     if (user_choice < 0 || user_choice > 2)
                     {
                         error = true;
-                        throw new Exception("Please enter correct input!\n");
+                        throw new Exception("Please enter correct input!");
                     }
                 }
                 catch (InputMismatchException user_choice_err)
                 {
                     error = true;
-                    System.err.println("Error! : Please enter correct input!\n");
+                    System.err.println("Error! : Please enter correct input!");
                 }
                 catch (Exception user_choice_err)
                 {
@@ -387,13 +434,13 @@ public class Assignment_oop
                             if (account_type < 1 || account_type > 2)
                             {
                                 error = true;
-                                throw new Exception("Please enter correct input!\n");
+                                throw new Exception("Please enter correct input!");
                             }
                         }
                         catch (InputMismatchException account_type_err)
                         {
                             error = true;
-                            System.err.println("Error! : Please enter correct input!\n");
+                            System.err.println("Error! : Please enter correct input!");
                         }
                         catch (Exception account_type_err)
                         {
@@ -429,16 +476,17 @@ public class Assignment_oop
                             error = false;
                             question_name();
                             name = input.nextLine();
-                            matcher = pattern.matcher(account[loop].getFull_name());
+                            matcher = pattern.matcher(name);
 
-                            if (account[loop].getFull_name().length() == 0)
+                            // if nothing in input
+                            if (name.length() == 0)
                             {
                                 throw new Exception("Your name cannot be empty!");
                             }
                             // if name inputted does not follow regEx pattern
                             if (!matcher.matches())
                             {
-                                throw new Exception("Error! Please enter a valid name!(No special symbol except . - ')");
+                                throw new Exception("Error! Please enter a valid name! (No special symbol except . - ')");
                             }
                         }
                         catch (Exception account_num_err)
@@ -447,54 +495,56 @@ public class Assignment_oop
                             System.err.println("Error! : " + account_num_err.getMessage());
                         }
                         input = new Scanner(System.in);   // clear buffer
+
                     } while (error);
                     
-                    account[loop].setFull_name(name);                 
+                    account[loop].setFull_name(name);
+
                     // display_acc() funct. call
                     display_account(loop, account);
+
                     loop++;
                     break;
-                } // Case 1 ends
+                }   // Case 1 ends
                 
                 // if make transaction
                 case 2:
                 {
-
                     // user input for acc_num
                     // ! input validation for acc_num        
                     try
                     {
                         question_accountNumber();
                         account_number = input.nextInt();
+
                         // find_account() funct. call
                         userPlaceInArray = find_account(account_number, account);
                         
                         // if acc_num is outside range
                         if (account_number < 1001 || account_number > 9999)
                         {
-                            
                             throw new Exception("Please enter correct input!");
                         }
                         // if acc is not found 
-                        if(userPlaceInArray==-99)
+                        if(userPlaceInArray == -99)
                         {
                             throw new Exception("Account Doesn't Exist!");
                         }
                     }
                     catch (InputMismatchException account_num_err)
                     {
-                        
+                        input = new Scanner(System.in);   // clear buffer
                         System.err.println("Error! : Please enter correct input!\n");
                         transaction_fail();
                         break;
                     }
                     catch (Exception account_num_err)
-                    { 
+                    {
+                        input = new Scanner(System.in);   // clear buffer 
                         System.err.println("Error! : " + account_num_err.getMessage());
                         transaction_fail();
                         break;
                     }
-                    input = new Scanner(System.in);   // clear buffer
 
                     // user input for user_choice
                     // ! input validation for user_choice
@@ -528,6 +578,7 @@ public class Assignment_oop
                             System.err.println("Error! : " + user_choice_err.getMessage());
                         }
                         input = new Scanner(System.in);   // clear buffer
+
                     } while (error);
                     
                     // switch... on user_choice
@@ -543,7 +594,6 @@ public class Assignment_oop
                         // if deposit
                         case 2:
                         {
-
                             // ! input validation for valueInput
                             question_deposit();
                             try
@@ -558,19 +608,21 @@ public class Assignment_oop
                             }
                             catch (InputMismatchException value_input_err)
                             {
+                                input = new Scanner(System.in);   // clear buffer
                                 System.err.println("Error! : Please enter correct input!\n");
                                 transaction_fail();
                                 break;
                             }
                             catch (Exception value_input_err)
                             {
+                                input = new Scanner(System.in);   // clear buffer
                                 System.err.println("Error! : " + value_input_err.getMessage());
                                 transaction_fail();
                                 break;
                             }
-                            input = new Scanner(System.in);   // clear buffer
 
                             deposit_function(userPlaceInArray, valueInput, account);
+
                             System.out.println("\nYour updated balance : ");
                             display_transac(userPlaceInArray, account);
                             break;
@@ -589,26 +641,30 @@ public class Assignment_oop
                                 {
                                     throw new Exception("Deposit cannot be less than 0!\n");
                                 }
+
                                 // if withdraw more than balance
-                                if (account[userPlaceInArray].getBalance()<valueInput){
+                                if (account[userPlaceInArray].getBalance() < valueInput)
+                                {
                                     throw new Exception("Withdraw amount can't be more than balance\n");
                                 }
                             }
                             catch (InputMismatchException value_input_err)
                             {
+                                input = new Scanner(System.in);   // clear buffer
                                 System.err.println("Error! : Please enter correct input!\n");
                                 transaction_fail();
                                 break;
                             }
                             catch (Exception value_input_err)
                             {
+                                input = new Scanner(System.in);   // clear buffer
                                 System.err.println("Error! : " + value_input_err.getMessage());
                                 transaction_fail();
                                 break;
                             }
-                            input = new Scanner(System.in);   // clear buffer
 
                             withdraw_function(userPlaceInArray, valueInput, account);
+
                             System.out.println("\nYour updated balance : ");
                             display_transac(userPlaceInArray, account);
                             break;
@@ -627,24 +683,26 @@ public class Assignment_oop
                                 {
                                     throw new Exception("Deposit cannot be less than 0!\n");
                                 }
-                                //if the transferred amount more than user deposit
-                                if (account[userPlaceInArray].getBalance()<valueInput){
+                                // if the transferred amount more than user deposit
+                                if (account[userPlaceInArray].getBalance() < valueInput)
+                                {
                                     throw new Exception("Transfer amount can't be more than balance\n");
                                 }
                             }
                             catch (InputMismatchException value_input_err)
                             {
+                                input = new Scanner(System.in);   // clear buffer
                                 System.err.println("Error! : Please enter correct input!\n");
                                 transaction_fail();
                                 break;
                             }
                             catch (Exception value_input_err)
                             {
+                                input = new Scanner(System.in);   // clear buffer
                                 System.err.println("Error! : " + value_input_err.getMessage());
                                 transaction_fail();
                                 break;
                             }
-                            input = new Scanner(System.in);   // clear buffer
                             
                             // user input for acc_num
                             // ! input validation for acc_num        
@@ -672,17 +730,18 @@ public class Assignment_oop
                             }
                             catch (InputMismatchException account_num_err)
                             {
+                                input = new Scanner(System.in);   // clear buffer
                                 System.err.println("Error! : Please enter correct input!\n");
                                 transaction_fail();
                                 break;
                             }
                             catch (Exception account_num_err)
                             {
+                                input = new Scanner(System.in);   // clear buffer
                                 System.err.println("Error! : " + account_num_err.getMessage());
                                 transaction_fail();
                                 break;
                             }
-                            input = new Scanner(System.in);   // clear buffer
                             
                             transaction_success(userPlaceInArray,receiverPlaceInArray,valueInput,account);
                             break;
