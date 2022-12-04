@@ -5,7 +5,7 @@
 | Lang : java                                                                  |
 | Date Created : 30/11/2022                                                    |
 *******************************************************************************/
-//package assignment_oop;
+package assignment_oop;
 import java.util.*;
 import java.util.regex.*;
 
@@ -318,6 +318,7 @@ public class Assignment_OOP
         System.out.print("Your Input : ");
     }
 
+    // transfer success display funct.
     static void transaction_success(int userPlaceInArray,int receiverPlaceInArray, double valueInput,BankAccount[] account)
     {
         System.out.print("\n");
@@ -339,6 +340,7 @@ public class Assignment_OOP
         System.out.print("\n");
     }
 
+    // transfer fail display funct.
     static void transaction_fail()
     {
         System.out.print("\n");
@@ -409,6 +411,7 @@ public class Assignment_OOP
                     System.err.println("Error! : " + user_choice_err.getMessage());
                 }
                 input = new Scanner(System.in);     // clean buffer
+
             } while (error);
             
             // switch... on user_choice
@@ -424,9 +427,10 @@ public class Assignment_OOP
                     {
                         try
                         {
-                            // start of except. cause
                             error = false;
                             question_accountType();
+
+                            // start of except. cause
                             account_type = input.nextInt();
                             // end of except. cause
 
@@ -475,7 +479,11 @@ public class Assignment_OOP
                         {
                             error = false;
                             question_name();
+
+                            // start of except. cause
                             name = input.nextLine();
+                            // end of except. cause
+
                             matcher = pattern.matcher(name);
 
                             // if nothing in input
@@ -515,7 +523,10 @@ public class Assignment_OOP
                     try
                     {
                         question_accountNumber();
+
+                        // start of except. cause
                         account_number = input.nextInt();
+                        // end of except. cause
 
                         // find_account() funct. call
                         userPlaceInArray = find_account(account_number, account);
@@ -550,7 +561,7 @@ public class Assignment_OOP
                     // ! input validation for user_choice
                     do
                     {
-                        //Welcome user to the transaction menu
+                        // Welcome user to the transaction menu
                         System.out.println("Welcome Mr./Mrs. " + account[userPlaceInArray].getFull_name() + "\n");
                         transaction_menu();
                         
@@ -598,7 +609,9 @@ public class Assignment_OOP
                             question_deposit();
                             try
                             {
+                                // start of except. cause
                                 valueInput = input.nextDouble();
+                                // end of except. cause
 
                                 // if no except. raised but less than 0; else cont.
                                 if (valueInput < 0)
@@ -634,7 +647,10 @@ public class Assignment_OOP
                             try
                             {
                                 question_withdraw();
+
+                                // start of except. cause
                                 valueInput = input.nextDouble();
+                                // end of except. cause
 
                                 // if no except. raised but less than 0; else cont.
                                 if (valueInput < 0)
@@ -676,7 +692,10 @@ public class Assignment_OOP
                             try
                             {
                                 question_transfer_amount();
+
+                                // start of except. cause
                                 valueInput = input.nextDouble();
+                                // end of except. cause
 
                                 // if no except. raised but less than 0; else cont.
                                 if (valueInput < 0)
@@ -709,7 +728,11 @@ public class Assignment_OOP
                             try
                             {
                                 question_transfer_receiver();
+
+                                // start of except. cause
                                 account_number = input.nextInt();
+                                // end of except. cause
+
                                 receiverPlaceInArray = find_account(account_number, account);
                                 
                                 // if acc_num is outside range
