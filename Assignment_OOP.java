@@ -9,42 +9,6 @@ package assignment_oop;
 import java.util.*;
 import java.util.regex.*;
 
-
-/*
-    // - done
-    ! - need help
-    ? - question
-    // TODO_done : superclass - BankAccount
-            // data mem., super construc., getter & setter
-        // TODO_done : subclass - SavingAccount
-            // sub construc.
-        // TODO_done : subclass - CurrentAccount
-            // sub construc.
-    // TODO_done : main class
-        // display
-        // deposit
-        // withdraw
-        // transfer
-        
-    ! err. handling and valid.
-        // user_choice (main menu)
-            create acc :
-            // acc_type
-            // full_name
-            // TODO_done : matcher, pattern class for full_name
-            transact :
-            // acc_num
-            //- user_choice
-                //- valueInput (deposit)
-                //- valueInput (withdraw)
-                //- valueInput (transfer)
-                    //- acc_num (transfer)
-    ! refactoring and comment
-    ? ByteArrayCounter looks like not used, remove?
-    ? change snake_case to camelCase?
-    ? refactor - move all input valid. to functs.?
- */
-
 // super class 
 abstract class BankAccount
 {
@@ -238,7 +202,6 @@ public class Assignment_oop
         {
             if(account[i]==null)
             {
-                System.out.println("Bank Account not found !\n");
                 return -99;
             }
             
@@ -247,7 +210,6 @@ public class Assignment_oop
                 return i;
             }
         }
-        return -99;
     }
     
     // ! changed to toString - retr0
@@ -280,7 +242,6 @@ public class Assignment_oop
     static void deposit_function(int i,double amount,BankAccount[] account)
     {
         account[i].setBalance(amount + account[i].getBalance());
-        System.out.println("Money Deposited!");
     }
     
     // withdraw menu funct.
@@ -293,9 +254,7 @@ public class Assignment_oop
     // withdraw funct.
     static void withdraw_function(int i, double withdraw, BankAccount[] account)
     {
-        double bal = account[i].getBalance();
-        bal = bal - withdraw;
-        account[i].setBalance(bal);
+        account[i].setBalance(account[i].getBalance() - withdraw);
     }
     
     // transfer menu funct.
@@ -311,6 +270,36 @@ public class Assignment_oop
         System.out.println("\nPlease enter the receiver account number : ");
         System.out.print("Your Input : ");
     }
+
+    static void transaction_success(int userPlaceInArray,int receiverPlaceInArray, double valueInput,BankAccount[] account)
+    {
+        System.out.print("\n");
+        display_transac(userPlaceInArray, account);
+        System.out.println("\n-------Transfering RM" + String.format("%.2f", valueInput) + "-------\n");
+        display_transac(receiverPlaceInArray, account);
+        System.out.print("\n");
+        System.out.println("======================================");
+        withdraw_function(userPlaceInArray, valueInput, account);
+        deposit_function(receiverPlaceInArray, valueInput, account);
+        System.out.println("Transaction Successful!");
+        System.out.println("======================================");
+        System.out.print("\n");
+        
+        //Display after transfer done
+        display_transac(userPlaceInArray, account);
+        System.out.println("\n------- RM" + String.format("%.2f", valueInput) + " Transfered-------\n");
+        display_transac(receiverPlaceInArray, account);
+        System.out.print("\n");
+    }
+
+    static void transaction_fail()
+    {
+        System.out.print("\n");
+        System.out.println("======================================");
+        System.out.println("Transaction Failed/Cancelled!");
+        System.out.println("======================================");
+        System.out.print("\n");
+    }
     
     
     // psvm for main class
@@ -319,24 +308,23 @@ public class Assignment_oop
         // Local var and obj init.
         // ! init all vars that need to pass valid. first
         int loop = 0;
-        int user_choice = 1;
-        int account_type = 1;
+        int user_choice = 0;
+        int account_type = 0;
         int account_number = 0;
+        int userPlaceInArray = 0;
+        int receiverPlaceInArray = 0;
+
         double valueInput = 0;
-        int userPlaceInArray;
-        int receiverPlaceInArray;
+
+        String name = " ";
+
+        boolean error = false;
         
         BankAccount[] account;
         account = new BankAccount[10];
         Scanner input = new Scanner(System.in);
-        
-        
-        boolean error = false;
-
+   
         Matcher matcher;
-        //name should'nt be regex in the first place since name is very culture-centric
-        //this regex should be work normarly for name with special symbol like St.Martin etc.
-        //unless your name is elon musk son's
         final String VALID_NAME_PATTERN = "^[a-zA-Z \\-\\.\\']*$";
         Pattern pattern = Pattern.compile(VALID_NAME_PATTERN);
         
@@ -366,15 +354,14 @@ public class Assignment_oop
                 catch (InputMismatchException user_choice_err)
                 {
                     error = true;
-                    System.out.println("Error! : Please enter correct input!\n");
+                    System.err.println("Error! : Please enter correct input!\n");
                 }
                 catch (Exception user_choice_err)
                 {
                     error = true;
-                    System.out.println("Error! : " + user_choice_err.getMessage());
+                    System.err.println("Error! : " + user_choice_err.getMessage());
                 }
                 input = new Scanner(System.in);     // clean buffer
-                
             } while (error);
             
             // switch... on user_choice
@@ -388,11 +375,11 @@ public class Assignment_oop
                     // ! input validation for account_type
                     do
                     {
-                        error = false;
-                        question_accountType();
                         try
                         {
                             // start of except. cause
+                            error = false;
+                            question_accountType();
                             account_type = input.nextInt();
                             // end of except. cause
 
@@ -406,12 +393,12 @@ public class Assignment_oop
                         catch (InputMismatchException account_type_err)
                         {
                             error = true;
-                            System.out.println("Error! : Please enter correct input!\n");
+                            System.err.println("Error! : Please enter correct input!\n");
                         }
                         catch (Exception account_type_err)
                         {
                             error = true;
-                            System.out.println("Error! : " + account_type_err.getMessage());
+                            System.err.println("Error! : " + account_type_err.getMessage());
                         }
                         input = new Scanner(System.in);   // clear buffer
 
@@ -435,96 +422,79 @@ public class Assignment_oop
                     }
                     
                     // user input for full_name
-                    question_name();
-                    account[loop].setFull_name(input.nextLine());
-                    
-                    matcher = pattern.matcher(account[loop].getFull_name());
-
-                    // ! input validation for full_name
-                    // if return null go to do... while
-                    if (account[loop].getFull_name().length() == 0)
+                    do
                     {
-                        do
+                        try
                         {
-                            System.out.println("Your name cannot be empty!");
+                            error = false;
                             question_name();
-                            account[loop].setFull_name(input.nextLine());
-
-                        } while (account[loop].getFull_name().length() == 0);
-                    }
-
-                    // if name inputted does not follow regEx pattern
-                    if (!matcher.matches())
-                    {
-                        do
-                        {
-                            System.out.println("Error! Please enter a valid name!(No special symbol except . - ')");
-                            question_name();
-                            account[loop].setFull_name(input.nextLine());
-
+                            name = input.nextLine();
                             matcher = pattern.matcher(account[loop].getFull_name());
 
-                        } while (!matcher.matches());
-                    }
+                            if (account[loop].getFull_name().length() == 0)
+                            {
+                                throw new Exception("Your name cannot be empty!");
+                            }
+                            // if name inputted does not follow regEx pattern
+                            if (!matcher.matches())
+                            {
+                                throw new Exception("Error! Please enter a valid name!(No special symbol except . - ')");
+                            }
+                        }
+                        catch (Exception account_num_err)
+                        {
+                            error = true;
+                            System.err.println("Error! : " + account_num_err.getMessage());
+                        }
+                        input = new Scanner(System.in);   // clear buffer
+                    } while (error);
                     
-                    // moved to funct - retr0
+                    account[loop].setFull_name(name);                 
                     // display_acc() funct. call
                     display_account(loop, account);
                     loop++;
                     break;
-
                 } // Case 1 ends
                 
                 // if make transaction
                 case 2:
                 {
-                    error = false;
 
                     // user input for acc_num
-                    // ! input validation for acc_num
-                    do
-                    {                        
+                    // ! input validation for acc_num        
+                    try
+                    {
                         question_accountNumber();
+                        account_number = input.nextInt();
+                        // find_account() funct. call
+                        userPlaceInArray = find_account(account_number, account);
                         
-                        try
+                        // if acc_num is outside range
+                        if (account_number < 1001 || account_number > 9999)
                         {
-                            // start of except. cause
-                            account_number = input.nextInt();
-                            // end of except. cause
                             
-                            // if acc_num is outside range
-                            if (account_number < 1001 || account_number > 9999)
-                            {
-                                error = true;
-                                throw new Exception("Please enter correct input!");
-                            }
-                            else
-                            {
-                                error = false;
-                            }
+                            throw new Exception("Please enter correct input!");
                         }
-                        catch (InputMismatchException account_num_err)
+                        // if acc is not found 
+                        if(userPlaceInArray==-99)
                         {
-                            error = true;
-                            System.out.println("Error! : Please enter correct input!\n");
+                            throw new Exception("Account Doesn't Exist!");
                         }
-                        catch (Exception account_num_err)
-                        {
-                            error = true;
-                            System.out.println("Error! : " + account_num_err.getMessage());
-                        }
-                        input = new Scanner(System.in);   // clear buffer
+                    }
+                    catch (InputMismatchException account_num_err)
+                    {
                         
-                    } while (error);
-                    
-                    // find_account() funct. call
-                    userPlaceInArray = find_account(account_number, account);
-                    
-                    // if acc is not found 
-                    if(userPlaceInArray==-99)
+                        System.err.println("Error! : Please enter correct input!\n");
+                        transaction_fail();
                         break;
-                    
-                    error = false;
+                    }
+                    catch (Exception account_num_err)
+                    { 
+                        System.err.println("Error! : " + account_num_err.getMessage());
+                        transaction_fail();
+                        break;
+                    }
+                    input = new Scanner(System.in);   // clear buffer
 
                     // user input for user_choice
                     // ! input validation for user_choice
@@ -550,15 +520,14 @@ public class Assignment_oop
                         catch (InputMismatchException user_choice_err)
                         {
                             error = true;
-                            System.out.println("Error! : Please enter correct input!\n");
+                            System.err.println("Error! : Please enter correct input!\n");
                         }
                         catch (Exception user_choice_err)
                         {
                             error = true;
-                            System.out.println("Error! : " + user_choice_err.getMessage());
+                            System.err.println("Error! : " + user_choice_err.getMessage());
                         }
                         input = new Scanner(System.in);   // clear buffer
-
                     } while (error);
                     
                     // switch... on user_choice
@@ -576,34 +545,30 @@ public class Assignment_oop
                         {
 
                             // ! input validation for valueInput
-                            do
+                            question_deposit();
+                            try
                             {
-                                error = false; //this should place inside the loop
-                                question_deposit();
-                                try
-                                {
-                                    valueInput = input.nextDouble();
+                                valueInput = input.nextDouble();
 
-                                    // if no except. raised but less than 0; else cont.
-                                    if (valueInput < 0)
-                                    {
-                                        error = true;
-                                        throw new Exception("Deposit cannot be less than 0!\n");
-                                    }
-                                }
-                                catch (InputMismatchException value_input_err)
+                                // if no except. raised but less than 0; else cont.
+                                if (valueInput < 0)
                                 {
-                                    error = true;
-                                    System.out.println("Error! : Please enter correct input!\n");
+                                    throw new Exception("Deposit cannot be less than 0!\n");
                                 }
-                                catch (Exception value_input_err)
-                                {
-                                    error = true;
-                                    System.out.println("Error! : " + value_input_err.getMessage());
-                                }
-                                input = new Scanner(System.in);   // clear buffer
-
-                            } while (error);
+                            }
+                            catch (InputMismatchException value_input_err)
+                            {
+                                System.err.println("Error! : Please enter correct input!\n");
+                                transaction_fail();
+                                break;
+                            }
+                            catch (Exception value_input_err)
+                            {
+                                System.err.println("Error! : " + value_input_err.getMessage());
+                                transaction_fail();
+                                break;
+                            }
+                            input = new Scanner(System.in);   // clear buffer
 
                             deposit_function(userPlaceInArray, valueInput, account);
                             System.out.println("\nYour updated balance : ");
@@ -614,35 +579,34 @@ public class Assignment_oop
                         case 3:
                         {
                             // ! input validation for valueInput
-                            do
+                            try
                             {
-                                error = false; //this should place inside the loop
                                 question_withdraw();
-                                try
-                                {
-                                    valueInput = input.nextDouble();
+                                valueInput = input.nextDouble();
 
-                                    // if no except. raised but less than 0; else cont.
-                                    if (valueInput < 0)
-                                    {
-                                        error = true;
-                                        throw new Exception("Deposit cannot be less than 0!\n");
-                                    }
-                                }
-                                catch (InputMismatchException value_input_err)
+                                // if no except. raised but less than 0; else cont.
+                                if (valueInput < 0)
                                 {
-                                    error = true;
-                                    System.out.println("Error! : Please enter correct input!\n");
+                                    throw new Exception("Deposit cannot be less than 0!\n");
                                 }
-                                catch (Exception value_input_err)
-                                {
-                                    error = true;
-                                    System.out.println("Error! : " + value_input_err.getMessage());
+                                // if withdraw more than balance
+                                if (account[userPlaceInArray].getBalance()<valueInput){
+                                    throw new Exception("Withdraw amount can't be more than balance\n");
                                 }
-                                input = new Scanner(System.in);   // clear buffer
-                                
-                            } while (error);
-
+                            }
+                            catch (InputMismatchException value_input_err)
+                            {
+                                System.err.println("Error! : Please enter correct input!\n");
+                                transaction_fail();
+                                break;
+                            }
+                            catch (Exception value_input_err)
+                            {
+                                System.err.println("Error! : " + value_input_err.getMessage());
+                                transaction_fail();
+                                break;
+                            }
+                            input = new Scanner(System.in);   // clear buffer
 
                             withdraw_function(userPlaceInArray, valueInput, account);
                             System.out.println("\nYour updated balance : ");
@@ -653,90 +617,74 @@ public class Assignment_oop
                         case 4:
                         {
                             // ! input validation for valueInput
-                            do
+                            try
                             {
-                                error = false; //this should place inside the loop
                                 question_transfer_amount();
-                                try
-                                {
-                                    valueInput = input.nextDouble();
+                                valueInput = input.nextDouble();
 
-                                    // if no except. raised but less than 0; else cont.
-                                    if (valueInput < 0)
-                                    {
-                                        error = true;
-                                        throw new Exception("Deposit cannot be less than 0!\n");
-                                    }
-                                }
-                                catch (InputMismatchException value_input_err)
+                                // if no except. raised but less than 0; else cont.
+                                if (valueInput < 0)
                                 {
-                                    error = true;
-                                    System.out.println("Error! : Please enter correct input!\n");
+                                    throw new Exception("Deposit cannot be less than 0!\n");
                                 }
-                                catch (Exception value_input_err)
-                                {
-                                    error = true;
-                                    System.out.println("Error! : " + value_input_err.getMessage());
+                                //if the transferred amount more than user deposit
+                                if (account[userPlaceInArray].getBalance()<valueInput){
+                                    throw new Exception("Transfer amount can't be more than balance\n");
                                 }
-                                input = new Scanner(System.in);   // clear buffer
-                                
-                            } while (error);
+                            }
+                            catch (InputMismatchException value_input_err)
+                            {
+                                System.err.println("Error! : Please enter correct input!\n");
+                                transaction_fail();
+                                break;
+                            }
+                            catch (Exception value_input_err)
+                            {
+                                System.err.println("Error! : " + value_input_err.getMessage());
+                                transaction_fail();
+                                break;
+                            }
+                            input = new Scanner(System.in);   // clear buffer
                             
                             // user input for acc_num
-                            // ! input validation for acc_num
-                            do
-                            {                        
+                            // ! input validation for acc_num        
+                            try
+                            {
                                 question_transfer_receiver();
+                                account_number = input.nextInt();
+                                receiverPlaceInArray = find_account(account_number, account);
                                 
-                                try
+                                // if acc_num is outside range
+                                if (account_number < 1001 || account_number > 9999)
                                 {
-                                    // start of except. cause
-                                    account_number = input.nextInt();
-                                    // end of except. cause
-                                    
-                                    // if acc_num is outside range
-                                    if (account_number < 1001 || account_number > 9999)
-                                    {
-                                        error = true;
-                                        throw new Exception("Please enter correct input!");
-                                    }
-                                    else
-                                    {
-                                        error = false;
-                                    }
+                                    throw new Exception("Please enter correct input!");
                                 }
-                                catch (InputMismatchException account_num_err)
+
+                                if (receiverPlaceInArray==-99)
                                 {
-                                    error = true;
-                                    System.out.println("Error! : Please enter correct input!\n");
+                                    throw new Exception("Receiver Account doesn't exist!");
                                 }
-                                catch (Exception account_num_err)
-                                {
-                                    error = true;
-                                    System.out.println("Error! : " + account_num_err.getMessage());
-                                }
-                                input = new Scanner(System.in);   // clear buffer
                                 
-                            } while (error);
+                                if(userPlaceInArray==receiverPlaceInArray)
+                                {
+                                    throw new Exception("You can't transfer money to your own account!");
+                                }
+                            }
+                            catch (InputMismatchException account_num_err)
+                            {
+                                System.err.println("Error! : Please enter correct input!\n");
+                                transaction_fail();
+                                break;
+                            }
+                            catch (Exception account_num_err)
+                            {
+                                System.err.println("Error! : " + account_num_err.getMessage());
+                                transaction_fail();
+                                break;
+                            }
+                            input = new Scanner(System.in);   // clear buffer
                             
-                            receiverPlaceInArray = find_account(account_number, account);
-                            System.out.print("\n");
-                            display_transac(userPlaceInArray, account);
-                            System.out.println("\n-------Transfering RM" + String.format("%.2f", valueInput) + "-------\n");
-                            display_transac(receiverPlaceInArray, account);
-                            System.out.print("\n");
-                            System.out.println("======================================");
-                            withdraw_function(userPlaceInArray, valueInput, account);
-                            deposit_function(receiverPlaceInArray, valueInput, account);
-                            System.out.println("Transaction Successful!");
-                            System.out.println("======================================");
-                            System.out.print("\n");
-                            
-                            //Display after transfer done
-                            display_transac(userPlaceInArray, account);
-                            System.out.println("\n------- RM" + String.format("%.2f", valueInput) + " Transfered-------\n");;
-                            display_transac(receiverPlaceInArray, account);
-                            System.out.print("\n");
+                            transaction_success(userPlaceInArray,receiverPlaceInArray,valueInput,account);
                             break;
                         }
                         // default - break;
@@ -761,4 +709,3 @@ public class Assignment_oop
         } while (user_choice != 0);
     }  
 }
-
