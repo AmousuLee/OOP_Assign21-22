@@ -198,7 +198,7 @@ public class Assignment_oop
     static int find_account(int accnum, BankAccount[] account)
     {
         int i = 0;
-        while(account[i]==null)
+        while(account[i]!=null)
         {
             if(account[i].getAccount_number() == accnum)
             {
