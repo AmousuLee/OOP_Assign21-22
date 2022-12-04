@@ -1,6 +1,25 @@
+/******************************************************************************
+| Author 1 : Lee Xian Yang (SW01081013)                                        |
+| Author 2 : Amirul Fikri bin Azman Zafri (CS01081173)                         |
+| Author 3 : Vyner Nicholas Kayang (CS01081043)                                |
+| Lang : java                                                                  |
+| Date Created : 30/11/2022                                                    |
+*******************************************************************************/
 package assignment_oop;
 import java.util.*;
 import java.util.regex.*;
+
+/**
+ * This code is written for the submission of Group Assignment
+ * CSEB3313 : Object-oriented Programming
+ * 
+ * @author AmousuLee
+ * @author [redacted]
+ * @author Ret2y
+ * @version 1.7Alpha
+ * @since 30/11/2022
+ * @link https://github.com/AmousuLee/OOP_Assign21-22
+ */
 
 /*
     // - done
@@ -180,7 +199,7 @@ class CurrentAccount extends BankAccount
 }
 
 // main class
-public class Assignment_OOP
+public class Assignment_oop
 {
     // main menu funct.
     static void menu()
