@@ -1,4 +1,6 @@
+package assignment_oop;
 import java.util.*;
+import java.util.regex.*;
 
 /*
     // - done
@@ -23,7 +25,7 @@ import java.util.*;
             create acc :
             // acc_type
             // full_name
-            TODO : matcher, pattern class for full_name
+            // TODO_done : matcher, pattern class for full_name
 
             transact :
             // acc_num
@@ -213,7 +215,7 @@ public class Assignment_OOP
     // full name menu funct.
     static void question_name()
     {
-        System.out.println("\nPlease enter your name : ");
+        System.out.println("\nPlease enter your full name : ");
         System.out.print("Your Input : ");
     }
     
@@ -326,6 +328,11 @@ public class Assignment_OOP
         Scanner input = new Scanner(System.in);
         
         boolean error = false;
+
+        Matcher matcher;
+        // Axxxx Axxxx
+        final String VALID_NAME_PATTERN = "[A-Z][a-z]+[ ][A-Z][a-z]+";
+        Pattern pattern = Pattern.compile(VALID_NAME_PATTERN);
         
         // do... while input is not 0
         do
@@ -433,8 +440,9 @@ public class Assignment_OOP
                     question_name();
                     account[loop].setFull_name(input.nextLine());
                     
+                    matcher = pattern.matcher(account[loop].getFull_name());
+
                     // ! input validation for full_name
-                    // ? can possibly check for numbers in the str : use matcher, pattern calss.
                     // if return null go to do... while
                     if (account[loop].getFull_name().length() == 0)
                     {
@@ -445,6 +453,20 @@ public class Assignment_OOP
                             account[loop].setFull_name(input.nextLine());
 
                         } while (account[loop].getFull_name().length() == 0);
+                    }
+
+                    // if name inputted does not follow regEx pattern
+                    if (!matcher.matches())
+                    {
+                        do
+                        {
+                            System.out.println("Error! Please enter full name! (capital fronts)");
+                            question_name();
+                            account[loop].setFull_name(input.nextLine());
+
+                            matcher = pattern.matcher(account[loop].getFull_name());
+
+                        } while (!matcher.matches());
                     }
                     
                     // moved to funct - retr0
