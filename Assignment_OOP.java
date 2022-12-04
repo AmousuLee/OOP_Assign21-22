@@ -198,14 +198,18 @@ public class Assignment_oop
     static int find_account(int accnum, BankAccount[] account)
     {
         int i = 0;
-        while(account[i]==null)
+        for( ; i < account.length; i++)
         {
+            if(account[i]==null)
+            {
+                return -99;
+            }
+            
             if(account[i].getAccount_number() == accnum)
             {
                 return i;
             }
         }
-        return -99;
     }
     
     // ! changed to toString - retr0
